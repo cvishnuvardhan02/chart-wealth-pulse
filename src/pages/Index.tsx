@@ -4,14 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card } from '@/components/ui/card';
 import { StockChart } from '@/components/StockChart';
-import { CandlestickChart } from '@/components/CandlestickChart';
 import { NewsCard } from '@/components/NewsCard';
 import { useToast } from '@/components/ui/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, ChartBar, Brain, HelpCircle } from 'lucide-react';
+import { BookOpen, ChartBar, Brain, HelpCircle, LineChart, BarChart, Activity } from 'lucide-react';
 import { StockQuiz } from '@/components/StockQuiz';
 import { StockChatbot } from '@/components/StockChatbot';
 import { BeginnerGuide } from '@/components/BeginnerGuide';
+import { motion } from 'framer-motion';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const API_KEY = "cvtobvhr01qjg135bp5gcvtobvhr01qjg135bp60";
 const ALPHA_VANTAGE_API_KEY = "N5P8LHI5XRGN63C1";
@@ -21,13 +22,13 @@ const Index = () => {
   const [ticker, setTicker] = useState('');
   const [showSMA, setShowSMA] = useState(true);
   const [showEMA, setShowEMA] = useState(false);
+  const [chartType, setChartType] = useState<'line' | 'bar' | 'area'>('line');
   const [chartData, setChartData] = useState({
     labels: [] as string[],
     prices: [] as number[],
     sma: [] as number[],
     ema: [] as number[],
   });
-  const [candlestickData, setCandlestickData] = useState([]);
   const [news, setNews] = useState([]);
   const [userBalance, setUserBalance] = useState(100000);
   const [investmentAmount, setInvestmentAmount] = useState('');
@@ -177,8 +178,6 @@ const Index = () => {
           ema: newEma,
         };
       });
-      
-      fetchCandlestickData(ticker);
     } catch (error) {
       console.error('Error fetching data:', error);
       toast({
@@ -204,76 +203,73 @@ const Index = () => {
     }
   };
 
-  const fetchCandlestickData = async (ticker: string) => {
-    try {
-      const endDate = new Date();
-      const startDate = new Date();
-      startDate.setDate(endDate.getDate() - 30);
-      
-      const mockData = [];
-      let currentDate = new Date(startDate);
-      
-      while (currentDate <= endDate) {
-        const basePrice = 100 + Math.random() * 50;
-        const volatility = 5;
-        
-        const open = basePrice + (Math.random() - 0.5) * volatility;
-        const high = open + Math.random() * volatility;
-        const low = open - Math.random() * volatility;
-        const close = low + Math.random() * (high - low);
-        
-        mockData.push({
-          x: new Date(currentDate),
-          y: [open, high, low, close]
-        });
-        
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-      
-      setCandlestickData(mockData);
-    } catch (error) {
-      console.error("Error generating candlestick data:", error);
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gray-900 font-inter">
-      <div className="max-w-6xl mx-auto p-6 space-y-8 animate-fadeIn">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-950 font-inter">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="max-w-6xl mx-auto p-6 space-y-8"
+      >
         <header className="text-center">
-          <h1 className="text-4xl font-bold font-montserrat bg-gradient-to-r from-indigo-400 to-purple-400 text-transparent bg-clip-text mb-2">
+          <motion.h1 
+            className="text-4xl font-bold font-montserrat bg-gradient-to-r from-indigo-400 to-purple-400 text-transparent bg-clip-text mb-2"
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 100 }}
+          >
             Stock Market Analytics
-          </h1>
-          <p className="text-gray-400">Real-time market insights and trading</p>
+          </motion.h1>
+          <motion.p 
+            className="text-gray-400"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            Real-time market insights and trading
+          </motion.p>
         </header>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-4 bg-gray-800 p-1">
-            <TabsTrigger value="trade" className="data-[state=active]:bg-indigo-700 text-gray-300">
-              <ChartBar className="h-4 w-4 mr-2" />
-              Trade
-            </TabsTrigger>
-            <TabsTrigger value="learn" className="data-[state=active]:bg-indigo-700 text-gray-300">
-              <BookOpen className="h-4 w-4 mr-2" />
-              Learn
-            </TabsTrigger>
-            <TabsTrigger value="quiz" className="data-[state=active]:bg-indigo-700 text-gray-300">
-              <Brain className="h-4 w-4 mr-2" />
-              Quiz
-            </TabsTrigger>
-            <TabsTrigger value="chat" className="data-[state=active]:bg-indigo-700 text-gray-300">
-              <HelpCircle className="h-4 w-4 mr-2" />
-              Chat
-            </TabsTrigger>
-          </TabsList>
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            <TabsList className="grid grid-cols-4 bg-gray-800/50 p-1 backdrop-blur-md border border-gray-700/30 rounded-xl">
+              <TabsTrigger value="trade" className="data-[state=active]:bg-indigo-700 data-[state=active]:text-white text-gray-300">
+                <ChartBar className="h-4 w-4 mr-2" />
+                Trade
+              </TabsTrigger>
+              <TabsTrigger value="learn" className="data-[state=active]:bg-indigo-700 data-[state=active]:text-white text-gray-300">
+                <BookOpen className="h-4 w-4 mr-2" />
+                Learn
+              </TabsTrigger>
+              <TabsTrigger value="quiz" className="data-[state=active]:bg-indigo-700 data-[state=active]:text-white text-gray-300">
+                <Brain className="h-4 w-4 mr-2" />
+                Quiz
+              </TabsTrigger>
+              <TabsTrigger value="chat" className="data-[state=active]:bg-indigo-700 data-[state=active]:text-white text-gray-300">
+                <HelpCircle className="h-4 w-4 mr-2" />
+                Chat
+              </TabsTrigger>
+            </TabsList>
+          </motion.div>
           
           <TabsContent value="trade" className="space-y-6 mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+              className="grid grid-cols-1 md:grid-cols-5 gap-4 items-center"
+            >
               <Input
                 placeholder="Stock Ticker (e.g. AAPL)"
                 value={ticker}
                 onChange={(e) => setTicker(e.target.value.toUpperCase())}
-                className="md:col-span-2 bg-gray-800 border-gray-700 text-gray-200 focus:border-indigo-500"
+                className="md:col-span-2 bg-gray-800/70 border-gray-700/50 text-gray-200 focus:border-indigo-500"
               />
+              
               <div className="flex gap-4 md:col-span-1 text-gray-300">
                 <div className="flex items-center space-x-2">
                   <Checkbox id="sma" checked={showSMA} onCheckedChange={handleSMAChange} />
@@ -288,70 +284,146 @@ const Index = () => {
                   </label>
                 </div>
               </div>
+              
+              <Select 
+                value={chartType} 
+                onValueChange={(value) => setChartType(value as 'line' | 'bar' | 'area')}
+                className="md:col-span-1"
+              >
+                <SelectTrigger className="bg-gray-800/70 border-gray-700/50 text-gray-200">
+                  <SelectValue placeholder="Chart Type" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-800 border-gray-700 text-gray-200">
+                  <SelectItem value="line">
+                    <div className="flex items-center">
+                      <LineChart className="h-4 w-4 mr-2" />
+                      Line
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="bar">
+                    <div className="flex items-center">
+                      <BarChart className="h-4 w-4 mr-2" />
+                      Bar
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="area">
+                    <div className="flex items-center">
+                      <Activity className="h-4 w-4 mr-2" />
+                      Area
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              
               <Button 
                 onClick={startTracking} 
                 className="md:col-span-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
               >
                 Start Tracking
               </Button>
-            </div>
+            </motion.div>
 
-            <StockChart data={chartData} ticker={ticker} showSMA={showSMA} showEMA={showEMA} />
+            <StockChart 
+              data={chartData} 
+              ticker={ticker} 
+              showSMA={showSMA} 
+              showEMA={showEMA}
+              chartType={chartType}
+            />
 
-            {ticker && <CandlestickChart data={candlestickData} />}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
+              <Card className="p-6 backdrop-blur-xl bg-gray-900/90 border border-gray-700/50 shadow-xl text-gray-200">
+                <h2 className="text-xl font-semibold font-montserrat mb-4 bg-gradient-to-r from-indigo-400 to-purple-400 text-transparent bg-clip-text">
+                  Investment Overview
+                </h2>
+                <p className="text-lg text-gray-300 mb-4">Balance: ₹{userBalance.toFixed(2)}</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Input
+                    type="number"
+                    placeholder="Amount to invest"
+                    value={investmentAmount}
+                    onChange={(e) => setInvestmentAmount(e.target.value)}
+                    className="md:col-span-1 bg-gray-800/70 border-gray-700/50 text-gray-200"
+                  />
+                  <Button onClick={investInStock} className="bg-emerald-600 hover:bg-emerald-700">
+                    Invest
+                  </Button>
+                  <Button onClick={sellStock} variant="destructive">
+                    Sell
+                  </Button>
+                </div>
+                {invested > 0 && (
+                  <motion.p 
+                    className="text-sm text-gray-400 mt-4"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    Currently invested: ₹{invested} at ₹{purchasedPrice.toFixed(2)}
+                  </motion.p>
+                )}
+              </Card>
+            </motion.div>
 
-            <Card className="p-6 backdrop-blur-xl bg-gray-900/90 border border-gray-700/50 shadow-xl text-gray-200">
-              <h2 className="text-xl font-semibold font-montserrat mb-4 bg-gradient-to-r from-indigo-400 to-purple-400 text-transparent bg-clip-text">
-                Investment Overview
-              </h2>
-              <p className="text-lg text-gray-300 mb-4">Balance: ₹{userBalance.toFixed(2)}</p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Input
-                  type="number"
-                  placeholder="Amount to invest"
-                  value={investmentAmount}
-                  onChange={(e) => setInvestmentAmount(e.target.value)}
-                  className="md:col-span-1 bg-gray-800 border-gray-700 text-gray-200"
-                />
-                <Button onClick={investInStock} className="bg-emerald-600 hover:bg-emerald-700">
-                  Invest
-                </Button>
-                <Button onClick={sellStock} variant="destructive">
-                  Sell
-                </Button>
-              </div>
-              {invested > 0 && (
-                <p className="text-sm text-gray-400 mt-4">
-                  Currently invested: ₹{invested} at ₹{purchasedPrice.toFixed(2)}
-                </p>
-              )}
-            </Card>
-
-            <div className="space-y-4">
+            <motion.div 
+              className="space-y-4"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.5 }}
+            >
               <h2 className="text-xl font-semibold font-montserrat text-gray-200 bg-gradient-to-r from-indigo-400 to-purple-400 text-transparent bg-clip-text">
                 Latest News
               </h2>
               <div className="grid gap-4">
                 {news.map((article, index) => (
-                  <NewsCard key={index} article={article} />
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 * index + 0.8, duration: 0.4 }}
+                  >
+                    <NewsCard article={article} />
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </TabsContent>
           
           <TabsContent value="learn" className="mt-6">
-            <BeginnerGuide />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <BeginnerGuide />
+            </motion.div>
           </TabsContent>
           
           <TabsContent value="quiz" className="mt-6">
-            <StockQuiz />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <StockQuiz />
+            </motion.div>
           </TabsContent>
           
           <TabsContent value="chat" className="mt-6">
-            <StockChatbot />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <StockChatbot />
+            </motion.div>
           </TabsContent>
         </Tabs>
-      </div>
+      </motion.div>
     </div>
   );
 };
