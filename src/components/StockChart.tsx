@@ -1,7 +1,7 @@
 
 import { useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
-import { Chart } from 'chart.js/auto';
+import { Chart, ChartType } from 'chart.js/auto';
 import { cn } from '@/lib/utils';
 
 interface StockChartProps {
@@ -32,7 +32,7 @@ export const StockChart = ({ data, ticker, showSMA, showEMA, className }: StockC
     if (!ctx) return;
 
     chartInstance.current = new Chart(ctx, {
-      type: 'line',
+      type: 'line' as ChartType,
       data: {
         labels: data.labels,
         datasets: [

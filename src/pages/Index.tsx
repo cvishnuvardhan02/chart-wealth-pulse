@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -189,6 +188,14 @@ const Index = () => {
     }
   };
 
+  const handleSMAChange = (checked: boolean) => {
+    setShowSMA(checked);
+  };
+
+  const handleEMAChange = (checked: boolean) => {
+    setShowEMA(checked);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 font-inter">
       <div className="max-w-6xl mx-auto p-6 space-y-8 animate-fadeIn">
@@ -208,13 +215,13 @@ const Index = () => {
           />
           <div className="flex gap-4 md:col-span-1">
             <div className="flex items-center space-x-2">
-              <Checkbox id="sma" checked={showSMA} onCheckedChange={setShowSMA} />
+              <Checkbox id="sma" checked={showSMA} onCheckedChange={handleSMAChange} />
               <label htmlFor="sma" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 SMA
               </label>
             </div>
             <div className="flex items-center space-x-2">
-              <Checkbox id="ema" checked={showEMA} onCheckedChange={setShowEMA} />
+              <Checkbox id="ema" checked={showEMA} onCheckedChange={handleEMAChange} />
               <label htmlFor="ema" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 EMA
               </label>

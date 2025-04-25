@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import ApexCharts from 'apexcharts';
 import { cn } from '@/lib/utils';
@@ -13,7 +13,11 @@ interface CandlestickChartProps {
 }
 
 export const CandlestickChart = ({ data, className }: CandlestickChartProps) => {
+  const chartRef = useRef<HTMLDivElement>(null);
+  
   useEffect(() => {
+    if (!chartRef.current) return;
+    
     const options = {
       chart: {
         type: 'candlestick',
@@ -60,7 +64,12 @@ export const CandlestickChart = ({ data, className }: CandlestickChartProps) => 
       }
     };
 
-    const chart = new ApexCharts(document.querySelector("#candlestickChart"), options);
+    const chartElement = chartRef.current;
+    // Clear any existing charts
+    chartElement.innerHTML = '';
+    
+    // Create new chart
+    const chart = new ApexCharts(chartElement, options);
     chart.render();
 
     return () => {
@@ -70,7 +79,7 @@ export const CandlestickChart = ({ data, className }: CandlestickChartProps) => 
 
   return (
     <Card className={cn("p-6 mt-8 backdrop-blur-xl bg-white/80 border border-gray-200/50 shadow-xl", className)}>
-      <div id="candlestickChart" />
+      <div id="candlestickChart" ref={chartRef} />
     </Card>
   );
 };
