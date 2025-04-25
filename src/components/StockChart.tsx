@@ -1,8 +1,8 @@
 
 import { useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
-import { Chart, ChartType } from 'chart.js/auto';
 import { cn } from '@/lib/utils';
+import Chart from 'chart.js/auto';
 
 interface StockChartProps {
   data: {
@@ -32,7 +32,7 @@ export const StockChart = ({ data, ticker, showSMA, showEMA, className }: StockC
     if (!ctx) return;
 
     chartInstance.current = new Chart(ctx, {
-      type: 'line' as ChartType,
+      type: 'line',
       data: {
         labels: data.labels,
         datasets: [
@@ -81,22 +81,22 @@ export const StockChart = ({ data, ticker, showSMA, showEMA, className }: StockC
             },
             ticks: {
               maxTicksLimit: 10,
-              color: '#6b7280',
+              color: '#9ca3af',
             },
           },
           y: {
             grid: {
-              color: 'rgba(107, 114, 128, 0.1)',
+              color: 'rgba(55, 65, 81, 0.3)',
             },
             ticks: {
-              color: '#6b7280',
+              color: '#9ca3af',
             },
           },
         },
         plugins: {
           legend: {
             labels: {
-              color: '#6b7280',
+              color: '#9ca3af',
               usePointStyle: true,
               pointStyle: 'circle',
             },
@@ -113,7 +113,10 @@ export const StockChart = ({ data, ticker, showSMA, showEMA, className }: StockC
   }, [data, ticker, showSMA, showEMA]);
 
   return (
-    <Card className={cn("p-6 backdrop-blur-xl bg-white/80 border border-gray-200/50 shadow-xl", className)}>
+    <Card className={cn("p-6 backdrop-blur-xl bg-gray-900/90 border border-gray-700/50 shadow-xl text-gray-100", className)}>
+      <h2 className="text-xl font-semibold mb-4 bg-gradient-to-r from-indigo-400 to-purple-400 text-transparent bg-clip-text">
+        Real-Time Price: {ticker}
+      </h2>
       <canvas ref={chartRef} height="120" />
     </Card>
   );
