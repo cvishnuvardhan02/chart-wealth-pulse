@@ -1,3 +1,6 @@
+Lovalable ai: viva2k04 @ account
+username: viva
+
 # Welcome to your Lovable project
 
 ## Project info
