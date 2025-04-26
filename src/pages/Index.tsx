@@ -26,7 +26,7 @@ const Index = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ type: "spring", stiffness: 100 }}
           >
-            Stock Market Analytics
+            StockWise
           </motion.h1>
           <motion.p 
             className="text-gray-400"
@@ -34,7 +34,7 @@ const Index = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
           >
-            Real-time market insights and trading
+            Learn and Grow with us.
           </motion.p>
         </header>
 
