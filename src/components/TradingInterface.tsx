@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -232,7 +233,6 @@ export const TradingInterface = ({ className }: TradingInterfaceProps) => {
         <Select 
           value={chartType} 
           onValueChange={(value) => setChartType(value as 'line' | 'bar' | 'area')}
-          className="md:col-span-1"
         >
           <SelectTrigger className="bg-gray-800/70 border-gray-700/50 text-gray-200">
             <SelectValue placeholder="Chart Type" />
